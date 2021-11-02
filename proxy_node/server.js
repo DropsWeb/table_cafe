@@ -125,12 +125,6 @@ webSocketServer.on('connection', ws => {
                 console.log(answer);
                 ws.send(JSON.stringify(answer));
                 break;
-            case 'get_room':
-                get_room(data);
-                break;
-            case 'create_room':
-                console.log("Пользователь хочет создать комнату")
-                break;
             case 'check_cookie':
                 let check = false;
                 for (key in clients) {
@@ -159,9 +153,50 @@ webSocketServer.on('connection', ws => {
                 };
                 ws.send(JSON.stringify(data_cookie))
                 break;
+            case 'get_room':
+                get_room(data);
+                break;
+            case 'create_room':
+                console.log("Пользователь хочет создать комнату")
+                break;
             case 'end_order':
-                end_order(data)
-                break
+                end_order(data);
+                break;
+            case 'remove_order':
+                remove_order(data);
+                break;
+        }
+
+        function remove_order(data) {
+            let key_room = '';
+            rooms.forEach((room, key) => {
+                if (room.id == data.id_room) {
+                    key_room = key;
+                    let index = rooms[key].orders.indexOf(data.order);
+                    rooms[key].end_orders.splice(index, 1);
+                }
+            })
+            let result = {
+                type: 'get_room',
+                room: rooms[key_room]
+            };
+            uhelper.send_all(result, clients);
+        }
+        function end_order(data) {
+            let key_room = '';
+            rooms.forEach((room, key) => {
+                if (room.id == data.id_room) {
+                    key_room = key;
+                    let index = rooms[key].orders.indexOf(data.order);
+                    rooms[key].orders.splice(index, 1);
+                    rooms[key].end_orders.push(data.order);
+                }
+            })
+            let result = {
+                type: 'get_room',
+                room: rooms[key_room]
+            }
+            uhelper.send_all(result, clients);
         }
 
         function get_room(data) {

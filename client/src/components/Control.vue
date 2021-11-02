@@ -61,6 +61,14 @@ export default {
                 id_room: this.select_room.id
             }
             this.$store.dispatch('ws_message', JSON.stringify(data));
+        },
+        remove_order(order) {
+            let data = {
+                type: 'remove_order',
+                order: order,
+                id_room: this.select_room.id
+            }
+            this.$store.dispatch('ws_message', JSON.stringify(data));
         }
     }
 }
