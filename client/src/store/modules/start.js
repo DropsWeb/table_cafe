@@ -11,6 +11,7 @@ let defaultState = {
         mode: '',
         orders: [],
         end_orders: [],
+        info: ''
     }
 };
 
@@ -97,10 +98,14 @@ export default {
     },
     mutations: {
         get_room(state, data) {
-            console.log('Получение данных комнаты')
-            state.select_room.id = data.id;
-            state.select_room.orders = data.orders;
-            state.select_room.end_orders = data.end_orders;
+            if (state.select_room.id == data.id) {
+                console.log('Получение данных комнаты')
+                state.select_room.id = data.id;
+                state.select_room.orders = data.orders;
+                state.select_room.end_orders = data.end_orders;
+                state.select_room.info = data.info;
+            }
+
         },
         update_orders(state, data) {
             state.select_room.orders = data;

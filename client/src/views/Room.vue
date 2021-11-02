@@ -1,6 +1,6 @@
 <template>
     <div class="room">
-        <el-button style="margin-bottom: 10px" type="danger" v-if="select_room.mode !== 'select'" @click="change_mode('select')">Назад</el-button>
+        <el-button style="margin-bottom: 10px" type="danger" v-if="select_room.mode !== 'select' && select_room.mode !== 'window'" @click="change_mode('select')">Назад</el-button>
         <div class="select_container" v-if="select_room.mode == 'select'">
             <h1>Выберите режим</h1>
             <el-row>
@@ -39,6 +39,7 @@ export default {
     },
     setup() {
         let store = useStore();
+
         let id = router.currentRoute.value.params.id;
         let data = {
             type: 'get_room',

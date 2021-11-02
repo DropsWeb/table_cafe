@@ -13,7 +13,7 @@
                 Готовятся
             </el-header>
             <el-row class="order_list">
-                <el-col class="order_elem" v-for="order in select_room.orders" :key="order.id" :span="6"><el-button type="success" @click="end_order(order)">{{order}}</el-button></el-col>
+                <el-col class="order_elem" v-for="order in select_room.orders" :key="order.id" :span="6"><el-button type="danger" @click="end_order(order)">{{order}}</el-button></el-col>
             </el-row>
         </el-container>
 
@@ -23,7 +23,7 @@
                 Готовы
             </el-header>
             <el-row class="order_list">
-                <el-col class="order_elem" v-for="order in select_room.end_orders" :key="order.id" :span="6"><el-button type="danger" @click="remove_order(order)">{{order}}</el-button></el-col>
+                <el-col class="order_elem" v-for="order in select_room.end_orders" :key="order.id" :span="6"><el-button type="success" @click="remove_order(order)">{{order}}</el-button></el-col>
             </el-row>
         </el-container>
     </div>

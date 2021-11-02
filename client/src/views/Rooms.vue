@@ -1,6 +1,5 @@
 <template>
     <div class="rooms">
-      {{user}}
     <el-table
       :data="rooms"
       style="width: 100%">

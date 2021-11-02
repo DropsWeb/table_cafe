@@ -16,37 +16,61 @@ let rooms = [
         id: 1,
         name: 'Барнаул',
         orders: [],
-        end_orders: []
+        end_orders: [],
+        info: {
+            number: '8 (3852) 58-17-56',
+            site: 'diner22.ru'
+        }
     },
     {
         id: 2,
         name: 'Горный Алтай',
         orders: [],
-        end_orders: []
+        end_orders: [],
+        info: {
+            number: '8 (913) 999-40-12',
+            site: '94012.diner22.ru'
+        }
     },
     {
         id: 3,
         name: 'Новоалтайск',
         orders: [],
-        end_orders: []
+        end_orders: [],
+        info: {
+            number: '8 (3852) 58-02-14',
+            site: '570366.diner22.ru'
+        }
     },
     {
         id: 4,
         name: 'Новоалтайск Дёнер',
         orders: [],
-        end_orders: []
+        end_orders: [],
+        info: {
+            number: '8 (3852) 58-02-14',
+            site: '570366.diner22.ru'
+        }
     },
     {
         id: 5,
         name: 'Заринск',
         orders: [],
-        end_orders: []
+        end_orders: [],
+        info: {
+            number: '8 (983) 548-12-14',
+            site: '606506.diner22.ru'
+        }
     },
     {
         id: 6,
         name: 'Сростки',
         orders: [],
-        end_orders: []
+        end_orders: [],
+        info: {
+            number: '8 (3852) 58-17-56',
+            site: 'test.diner22.ru'
+        }
     },
 
 ];
@@ -211,6 +235,9 @@ webSocketServer.on('connection', ws => {
                 type: 'get_room',
                 room: rooms[key_room],
             };
+            console.log('Отдаю 2му пользователю комнаты');
+            console.log(rooms);
+            console.log(result);
             uhelper.send_all(result, clients);
         };
         function create_order(data) {
