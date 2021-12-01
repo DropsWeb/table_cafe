@@ -1,7 +1,7 @@
 let defaultState = {
     user: {
         authorized: '',
-        is_admin: false
+        is_admin: true
     },
     users: {},
     connection: '',
@@ -38,8 +38,18 @@ export default {
     },
     actions: {
         get_rooms(ctx, message) {
+            console.log('Так, сейчас я получу комнату', ws)
             let ws = ctx.getters.start_ws;
-            ws.send(JSON.stringify(message));
+            try {
+                ws.send(JSON.stringify(message));
+            } catch (err) {
+                console.log('ws ещё не загружен')
+            }
+            ws.onopen = function () {
+                console.log('Соединение есть, получаю комнаты, внимание!')
+                ws.send(JSON.stringify(message));
+            }
+            
         },
         ws_message(ctx, message) {
             let ws = ctx.getters.start_ws
@@ -51,7 +61,6 @@ export default {
                 let type = ws_data.type;
                 switch (type) {
                     case 'get_users':
-                        console.log('Тут новый данные о пользователях')
                         ctx.commit('update_users', ws_data.users);
                         break;
                     case 'get_nickname':
@@ -61,27 +70,29 @@ export default {
                         localStorage.setItem('cookie_user', ws_data.id);
                         break;
                     case 'auth_user':
-                        console.log('Тут данные авторизации')
-                        console.log(ws_data)
+                        localStorage.setItem('cookie_user', ws_data.cookie);
                         ctx.commit('put_nickname', ws_data);
                         break;
                     case 'get_rooms':
                         ctx.commit('update_rooms', ws_data);
                         break;
                     case 'get_room':
-                            ctx.commit('get_room', ws_data.room)
-                        break
+                        ctx.commit('get_room', ws_data.room)
+                        break;
                     case 'create_order':
                         if (ctx.state.select_room.id == ws_data.room.id) {
                             ctx.commit('update_orders', ws_data.room.orders)
                         }
                         break;
+                    case 'create_room':
+                        ctx.commit('update_rooms', ws_data);
+                        break;
                 }
-                console.log("Здесь пришло сообщение от сервера")
             }
 
             data.onopen = function(event) {
                 console.log("Это, как я понял, сервер запущен")
+                
                 if (localStorage.getItem('cookie_user')) {
                     let data_cookie = {
                         type: 'check_cookie',
@@ -99,7 +110,6 @@ export default {
     mutations: {
         get_room(state, data) {
             if (state.select_room.id == data.id) {
-                console.log('Получение данных комнаты')
                 state.select_room.id = data.id;
                 state.select_room.orders = data.orders;
                 state.select_room.end_orders = data.end_orders;
@@ -109,7 +119,6 @@ export default {
         },
         update_orders(state, data) {
             state.select_room.orders = data;
-            console.log(data)
         },
         update_users(state, data) {
             state.users = data;
@@ -124,11 +133,8 @@ export default {
             state.select_room.mode = data;
         },
         put_nickname(state, data) {
-            console.log(data)
             state.user.authorized = data.authorized;
             state.user.is_admin = data.is_admin;
-            console.log('А тут данные о пользователе')
-            console.log(state.user)
         },
         update_rooms(state, data) {
             state.rooms = data.rooms;

@@ -1,10 +1,11 @@
 <template>
     <div class="rooms">
+      <Admin/>
     <el-table
       :data="rooms"
       style="width: 100%">
       <el-table-column
-        label="Идентификатор"
+        label="Порядковый номер"
         prop="id">
       </el-table-column>
       <el-table-column
@@ -19,11 +20,22 @@
             size="mini"
             type="success"
             @click="enter_room(index.row)">Войти</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            v-if="user.is_admin"
-            @click="delete_room(index.row)">Удалить</el-button>
+            <el-popover
+            v-model="visible">
+            <p>Удалить данное кафе?</p>
+            <div class="popup_warning">
+              <el-button size="mini" type="default" @click="visible = false">отмена</el-button>
+              <el-button size="mini" type="danger" @click="delete_room(index.row)">удалить</el-button>
+            </div>
+            <template #reference>
+              <el-button
+              size="mini"
+              type="danger"
+              >
+              Удалить
+              </el-button>
+            </template>
+          </el-popover>
           <el-button
             size="mini"
             type="info"
@@ -38,12 +50,17 @@
 
 <script>
 import { useStore, mapGetters } from 'vuex';
+import Admin from '@/components/Admin.vue';
 import router from '../router';
 
 export default {
   name: 'Rooms',
+  components: {
+    Admin
+  },
   data(){
     return {
+      visible: false,
     }
   },
   computed: {
@@ -57,6 +74,9 @@ export default {
     store.dispatch('get_rooms', message)
   },
   methods: {
+    change_visible(){
+      this.visible = true;
+    },
     enter_room(index) {
       this.$store.commit('put_id_room', index.id)
       this.$store.commit('put_mode_room', 'select')
@@ -65,8 +85,11 @@ export default {
       console.log(index)
     },
     delete_room(index) {
-      console.log("Действие: удалить комнату")
-      console.log(index)
+      let data = {
+        type :"delete_room",
+        id: index.id
+      }
+      this.$store.dispatch('ws_message', JSON.stringify(data));
     },
     edit_room(index) {
       console.log("Действие: редактировать комнату")
@@ -79,4 +102,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.popup_warning {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 </style>

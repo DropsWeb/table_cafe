@@ -2,7 +2,7 @@
     <div class="control">
         <el-row>
             <el-col :span="18">
-                <el-input placeholder="Введите номер заказа" v-model="order" required></el-input>
+                <el-input placeholder="Введите номер заказа" v-model="order" inputmode='numeric' required></el-input>
             </el-col>
             <el-col :span="4" style='margin-left: 4px'>
                 <el-button type="success" @click="create_order(order)">Создать</el-button>

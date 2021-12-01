@@ -33,6 +33,10 @@ export default {
   },
   setup() {
     const store = useStore();
+    if(localStorage.getItem('cookie_user')){
+      router.push({name: 'Rooms'})
+    }
+
     const authorizarion = function(login_user) {
       let data = {
         type: "save_name",
@@ -46,6 +50,11 @@ export default {
       authorizarion
     }
   },
+  watch: {
+    user(val){
+      console.log(val)
+    }
+  }
 }
 </script>
 

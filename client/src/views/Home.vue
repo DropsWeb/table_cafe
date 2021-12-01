@@ -1,28 +1,19 @@
 <template>
   <div class="home">
-    <Reg
-    v-if="user.authorized == false"
-    />
+    <Reg/>
+    
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import {mapGetters, mapActions, useStore} from 'vuex';
-import Reg from '../components/Reg.vue';
+import {mapGetters, mapActions} from 'vuex';
+import Reg from '@/components/Reg.vue';
 export default {
   name: 'Home',
   components: {
     Reg
     // Header
-  },
-
-  created: function() {
-    const store = useStore();
-    console.log("Starting connection to WebSocket Server")
-    let connection = new WebSocket("ws://localhost:8999")
-    
-    store.dispatch('start_server', connection)
   },
   computed: mapGetters(['all_users', 'start_ws', 'user']),
 

@@ -19,8 +19,8 @@
 
 <script>
 import { mapGetters, useStore } from 'vuex';
-import Control from '../components/Control.vue';
-import Table from '../components/Table.vue';
+import Control from '@/components/Control.vue';
+import Table from '@/components/Table.vue';
 import router from '../router';
 
 export default {
